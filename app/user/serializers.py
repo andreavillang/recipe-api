@@ -12,7 +12,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         # this is required. We are making a list that states that I require these fields
         fields = ('email', 'password', 'name')
-        # For the password, we have a variable kwards, stands for keyword arguements. This states that the password has some validation and restrictions in this case its the password.
+        # For the password, we have a variable kwards, stands for keyword arguements. 
+        # This states that the password has some validation and restrictions in this case its the password.
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
@@ -21,15 +22,3 @@ class UserSerializer(serializers.ModelSerializer):
         """
         # we made this function, now we just call it with the data we've already validated.
         return get_user_model().objects.create_user(**validated_data)
-    
-    class AuthTokenSerializer(serializers.Serializer):
-        """
-        Serializer for the user authentication object
-        """
-        # we are stating that email is a charfield
-        email = serializers.CharField()
-        # we are stating that the password should a charfield. trim whitepaces is for normal blank spaces. This is for human errors
-        password = serializers.CharField(
-            style={'input_type': 'password'},
-            trim_whitespace=False
-    )
