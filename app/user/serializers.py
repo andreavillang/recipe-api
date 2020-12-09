@@ -22,7 +22,22 @@ class UserSerializer(serializers.ModelSerializer):
         Create a new user with encrypted password and return it
         """
         # we made this function, now we just call it with the data we've already validated.
-        return get_user_model().objects.create_user(**validated_data)\
+        return get_user_model().objects.create_user(**validated_data)
+    
+    def update(self, instance, validated_data):
+        """
+        Update a user, setting the password correctly and return it
+        """
+        # the pop() basically gets the dictionary/variable called password. Retrieve it then override it. We set it to NONE because we want it empty.
+        password = validated_data.pop('password', None)
+        # super() will call the ModelSerializer in our parameter update(). This just takes all the data and if it matches the data of the Original, override it.
+        user = super().update(instance, validated_data)
+        # If the user provided a password.
+        if password:
+            user.set_password(password)
+            user.save()
+    
+        return user
 
 # TOKEN SERIALIZER
 class AuthTokenSerializer(serializers.Serializer):
