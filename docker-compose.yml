@@ -1,0 +1,47 @@
+# this specifies which docker compose version to be used
+version: "3"
+# services declare which processes docker should look out for. In this project its just one which is the Django Project. You can have multiple here
+services:
+    # This is a service
+    app:
+        # This is to declare which files are to be used in the docker-compose
+        build:
+            # context tells docker which files to use. using . means root
+            context: .
+        # ports tell docker which ports to open
+        ports:
+            # this maps docker's port 8000 with our local port 8000. When we access port 800 we are also accessing dockers port 8000
+            - "8000:8000"
+        volumes:
+            # this tells docker that our local app folder is connected to dockers /app folder. If we update from out local machine, so does dockers /app folder.
+            - ./app:/app
+        # command is the command to be run. the > symbol allows us to use the next line for readability purposes.
+        command: >
+            sh -c  "python manage.py runserver 0.0.0.0:8000"
+        # This command gives docker the credentials it needs to use the db service we just declared
+        environment: 
+        # these are the environemt variables they are in relation to the db service we've stated below
+            - DB_HOST=db
+            - DB_NAME=app
+            - DB_USER=postgres
+            - DB_PASS=supersecretpassword
+        depends_on: 
+            - db
+    # this creates another service just like the app service above.
+    db: 
+        # this is the image. we're using postgres from the docker hub
+        image: postgres:13.0-alpine
+        # this is where we instantiate a DB named app, declaring a user and pass
+        environment: 
+            - POSTGRES_DB=app
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=supersecretpassword
+
+# SQLite is embedded so it runs within your app = serverless
+# SQLite is lightweight and fast
+# SQLite only supports a few datatypes and can't manage a complex database
+
+# PostgreSQL on the other hand works based on a client-server model which requires a DB server to set up and run over network
+# PostgreSQL supports almost all data types
+# PostgreSQL can handle multiple users with clear levels of permissions
+# PostgreSQL can perform complex operations
