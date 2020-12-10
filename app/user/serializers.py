@@ -3,6 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 
+# Serializers allow complex data such as querysets and model instances to be converted to native 
+# Python datatypes that can then be easily rendered into JSON
+# Like Django's 'Form' classes
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializer for the users object

@@ -17,7 +17,9 @@ services:
             - ./app:/app
         # command is the command to be run. the > symbol allows us to use the next line for readability purposes.
         command: >
-            sh -c  "python manage.py runserver 0.0.0.0:8000"
+            sh -c  "python manage.py wait_for_db && 
+                    python manage.py migrate &&
+                    python manage.py runserver 0.0.0.0:8000"
         # This command gives docker the credentials it needs to use the db service we just declared
         environment: 
         # these are the environemt variables they are in relation to the db service we've stated below

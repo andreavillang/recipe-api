@@ -3,6 +3,7 @@ FROM python:3.9-alpine
 # MAINTAINER is just a name to take note whos coding
 
 # This line of code is just to avoid any complications when running python apps on docker
+# Syncs DB
 ENV PYTHONUNBUFFERED 1
 # ./requirements.txt refers to our current directory. Itll copy that into docker's own 
 COPY ./requirements.txt /requirements.txt
