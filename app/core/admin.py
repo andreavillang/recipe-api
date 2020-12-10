@@ -36,3 +36,6 @@ class UserAdmin(BaseUserAdmin):
     )
 
 admin.site.register(models.User, UserAdmin)
+# we dont need to add UserAdmin since this 
+# Tag doesnt need any special settings coming from the admin.
+admin.site.register(models.Tag)

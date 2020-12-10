@@ -1,6 +1,19 @@
 from django.test import TestCase
+from django.urls import reverse
 # Django by default has its user model. You can access it using this line.
 from django.contrib.auth import get_user_model
+
+from rest_framework import status
+
+from core.models import Tag
+
+TAGS_URL = reverse('recipe:tag-list')
+
+def sample_user(email='test@amadora.com', password='testpass'):
+    """
+    return a user for testing our models.
+    """
+    return get_user_model().objects.create_user(email,password)
 
 class ModelTests(TestCase):
 
@@ -38,3 +51,15 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+    
+    def test_tag_str(self):
+        """
+        Test the tag's string representation
+        """
+        tag = Tag.objects.create(
+            user=sample_user(),
+            name='Vegan'
+        )
+        # Take note that we hope that whatever tag is as an object when we convert it to string it should be equal to its name. Thats the effect we're lookiung for.
+        self.assertEqual(str(tag), tag.name)
+    
